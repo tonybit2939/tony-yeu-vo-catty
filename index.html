@@ -26,9 +26,8 @@
       font-size: 3.5vw;
       color: #ffccff;
       text-shadow: 0 0 6px white, 0 0 15px #ff66cc, 0 0 25px #ff66cc;
-      animation: fallText linear forwards;
+      animation: tiktokText linear forwards;
       opacity: 0;
-      animation-name: tiktokText;
     }
 
     @keyframes tiktokText {
@@ -52,9 +51,8 @@
 
     .heart {
       animation: fallHeart linear forwards, heartbeat 1.5s infinite ease-in-out;
-      color: red;
       font-size: 4.5vw;
-      text-shadow: 0 0 10px red;
+      text-shadow: 0 0 10px;
     }
 
     @keyframes fallHeart {
@@ -69,50 +67,37 @@
     }
 
     @keyframes heartbeat {
-      0%, 100% {
-        transform: scale(1);
-      }
-      25% {
-        transform: scale(1.2);
-      }
-      50% {
-        transform: scale(0.95);
-      }
-      75% {
-        transform: scale(1.15);
-      }
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(0.95); }
+      75% { transform: scale(1.15); }
     }
 
     .tap-heart {
       position: absolute;
-      color: red;
       font-size: 6vw;
       pointer-events: none;
       animation: popHeart 0.8s ease-out forwards;
-      text-shadow: 0 0 10px red;
+      text-shadow: 0 0 10px;
     }
 
     @keyframes popHeart {
-      0% {
-        transform: scale(0);
-        opacity: 1;
-      }
-      50% {
-        transform: scale(1.5);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 0;
-      }
+      0% { transform: scale(0); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 1; }
+      100% { transform: scale(1); opacity: 0; }
     }
 
     .audio-wrapper {
       position: fixed;
-      bottom: 20px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
       z-index: 999;
+      animation: blink 1.2s infinite;
+    }
+
+    .audio-wrapper.hidden {
+      display: none;
     }
 
     .audio-wrapper button {
@@ -125,10 +110,15 @@
       cursor: pointer;
       box-shadow: 0 0 15px #ff66cc;
     }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
   </style>
 </head>
 <body>
-  <div class="audio-wrapper">
+  <div class="audio-wrapper" id="audioControl">
     <button onclick="playMusic()">💖 Click Here 💖</button>
     <audio id="bgMusic" loop>
       <source src="https://tonybit2939.github.io/tony-yeu-vo-catty/CATTYLOVE.mp3" type="audio/mpeg">
@@ -138,6 +128,8 @@
   <script>
     function playMusic() {
       const music = document.getElementById('bgMusic');
+      const control = document.getElementById('audioControl');
+      control.classList.add("hidden");
       music.play();
     }
 
@@ -165,31 +157,4 @@
     function createHeart() {
       const heart = document.createElement("div");
       heart.className = "heart";
-      heart.textContent = "❤️";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.setProperty('--scale', (0.7 + Math.random() * 1.2));
-      heart.style.animationDuration = (6 + Math.random() * 2) + "s";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 9000);
-    }
-
-    function createTapHeart(x, y) {
-      const heart = document.createElement("div");
-      heart.className = "tap-heart";
-      heart.textContent = "❤️";
-      heart.style.left = x - 20 + "px";
-      heart.style.top = y - 20 + "px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 1000);
-    }
-
-    // Sự kiện chạm hoặc click tạo trái tim tại vị trí
-    document.addEventListener('click', (e) => {
-      createTapHeart(e.clientX, e.clientY);
-    });
-
-    setInterval(createText, 150);
-    setInterval(createHeart, 250);
-  </script>
-</body>
-</html>
+      const isRed = Math.random() >
