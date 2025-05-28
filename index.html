@@ -6,11 +6,14 @@
   <title>Anh Yêu Em CATTY</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
-    body {
+    html, body {
       margin: 0;
-      background: black;
+      padding: 0;
       overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
       height: 100vh;
+      background: black;
       font-family: 'Great Vibes', cursive;
       perspective: 1000px;
     }
@@ -59,8 +62,8 @@
     }
 
     .floating-heart.white {
-      color: white;
-      text-shadow: 0 0 10px white;
+      color: #ccf9ff;
+      text-shadow: 0 0 10px #ccf9ff;
     }
 
     @keyframes floatFade {
@@ -103,26 +106,32 @@
 
     .audio-wrapper {
       position: fixed;
-      bottom: 20px;
+      top: 40%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
       z-index: 999;
     }
 
     .audio-wrapper button {
-      padding: 14px 28px;
-      font-size: 5vw;
+      padding: 16px 30px;
+      font-size: 6vw;
       background: #ff66cc;
       color: white;
       border: none;
-      border-radius: 12px;
+      border-radius: 20px;
       cursor: pointer;
-      box-shadow: 0 0 15px #ff66cc;
+      box-shadow: 0 0 20px #ff66cc;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
   </style>
 </head>
 <body>
-  <div class="audio-wrapper">
+  <div class="audio-wrapper" id="audioContainer">
     <button onclick="playMusic()">💖 Click Here 💖</button>
     <audio id="bgMusic" loop>
       <source src="https://tonybit2939.github.io/tony-yeu-vo-catty/CATTYLOVE.mp3" type="audio/mpeg">
@@ -133,6 +142,7 @@
     function playMusic() {
       const music = document.getElementById('bgMusic');
       music.play();
+      document.getElementById('audioContainer').style.display = 'none';
     }
 
     const messages = [
@@ -158,8 +168,16 @@
     function createFloatingHeart() {
       const heart = document.createElement("div");
       heart.className = "floating-heart";
-      heart.classList.add(Math.random() > 0.5 ? "red" : "white");
-      heart.textContent = "❤️";
+      const isRed = Math.random() > 0.5;
+
+      if (isRed) {
+        heart.classList.add("red");
+        heart.textContent = "❤️";
+      } else {
+        heart.classList.add("white");
+        heart.textContent = "🤍";
+      }
+
       heart.style.left = Math.random() * 100 + "vw";
       heart.style.top = Math.random() * 100 + "vh";
       document.body.appendChild(heart);
