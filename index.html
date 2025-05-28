@@ -69,10 +69,20 @@
 </head>
 <body>
   <div class="audio-wrapper">
-  <audio autoplay loop>
+  <button onclick="playMusic()" style="padding: 10px 20px; font-size: 18px; background: #ff66cc; color: white; border: none; border-radius: 8px; cursor: pointer;">
+    💖 YÊU THÌ BẤM VÀO 💖
+  </button>
+  <audio id="bgMusic" loop>
     <source src="https://tonybit2939.github.io/tony-yeu-vo-catty/CATTYLOVE.mp3" type="audio/mpeg">
   </audio>
 </div>
+
+<script>
+  function playMusic() {
+    const music = document.getElementById('bgMusic');
+    music.play();
+  }
+</script>
   <script>
     const messages = [
       "Anh yêu Catty",
