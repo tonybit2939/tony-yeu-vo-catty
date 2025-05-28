@@ -15,89 +15,98 @@
       perspective: 1000px;
     }
 
-    .falling-text, .heart {
+    .falling-text {
       position: absolute;
+      font-size: 3.5vw;
+      color: #ffccff;
       white-space: nowrap;
+      text-shadow: 0 0 6px white, 0 0 15px #ff66cc;
+      animation: tiktokText linear forwards;
       pointer-events: none;
       user-select: none;
     }
 
-    .falling-text {
-      font-size: 3.5vw;
-      color: #ffccff;
-      text-shadow: 0 0 6px white, 0 0 15px #ff66cc, 0 0 25px #ff66cc;
-      animation: tiktokText linear forwards;
-      opacity: 0;
-    }
-
     @keyframes tiktokText {
       0% {
-        transform: scale(0.3) translateY(-10vh) translateZ(var(--depth));
+        transform: scale(0.3) translateY(-10vh);
         opacity: 0;
       }
       10% {
-        transform: scale(1.1) translateY(5vh) translateZ(var(--depth));
+        transform: scale(1.1) translateY(5vh);
         opacity: 1;
       }
       90% {
-        transform: scale(1) translateY(100vh) translateZ(var(--depth));
+        transform: scale(1) translateY(100vh);
         opacity: 1;
       }
       100% {
-        transform: scale(1.2) translateY(110vh) translateZ(var(--depth));
+        transform: scale(1.2) translateY(110vh);
         opacity: 0;
       }
     }
 
-    .heart {
-      animation: fallHeart linear forwards, heartbeat 1.5s infinite ease-in-out;
-      font-size: 4.5vw;
-      text-shadow: 0 0 10px;
+    .floating-heart {
+      position: absolute;
+      font-size: 4vw;
+      animation: floatFade 3s ease-out forwards;
+      pointer-events: none;
+      user-select: none;
     }
 
-    @keyframes fallHeart {
+    .floating-heart.red {
+      color: red;
+      text-shadow: 0 0 10px red;
+    }
+
+    .floating-heart.white {
+      color: white;
+      text-shadow: 0 0 10px white;
+    }
+
+    @keyframes floatFade {
       0% {
-        transform: translateY(-10vh) scale(var(--scale));
+        opacity: 0;
+        transform: scale(0.5) translate(0, 0);
+      }
+      25% {
         opacity: 1;
       }
       100% {
-        transform: translateY(110vh) scale(var(--scale));
         opacity: 0;
+        transform: scale(1.5) translate(0, -50px);
       }
-    }
-
-    @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      25% { transform: scale(1.2); }
-      50% { transform: scale(0.95); }
-      75% { transform: scale(1.15); }
     }
 
     .tap-heart {
       position: absolute;
       font-size: 6vw;
-      pointer-events: none;
+      color: red;
+      text-shadow: 0 0 10px red;
       animation: popHeart 0.8s ease-out forwards;
-      text-shadow: 0 0 10px;
+      pointer-events: none;
     }
 
     @keyframes popHeart {
-      0% { transform: scale(0); opacity: 1; }
-      50% { transform: scale(1.5); opacity: 1; }
-      100% { transform: scale(1); opacity: 0; }
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0;
+      }
     }
 
     .audio-wrapper {
       position: fixed;
-      top: 50%;
+      bottom: 20px;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       z-index: 999;
-      animation: blink 1.2s infinite;
-    }
-
-    .audio-wrapper.hidden {
-      display: none;
     }
 
     .audio-wrapper button {
@@ -110,15 +119,10 @@
       cursor: pointer;
       box-shadow: 0 0 15px #ff66cc;
     }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
   </style>
 </head>
 <body>
-  <div class="audio-wrapper" id="audioControl">
+  <div class="audio-wrapper">
     <button onclick="playMusic()">💖 Click Here 💖</button>
     <audio id="bgMusic" loop>
       <source src="https://tonybit2939.github.io/tony-yeu-vo-catty/CATTYLOVE.mp3" type="audio/mpeg">
@@ -128,8 +132,6 @@
   <script>
     function playMusic() {
       const music = document.getElementById('bgMusic');
-      const control = document.getElementById('audioControl');
-      control.classList.add("hidden");
       music.play();
     }
 
@@ -148,13 +150,38 @@
       text.className = "falling-text";
       text.textContent = messages[Math.floor(Math.random() * messages.length)];
       text.style.left = Math.random() * 100 + "vw";
-      text.style.setProperty('--depth', (Math.random() * 800 - 400) + "px");
       text.style.animationDuration = (6 + Math.random() * 2) + "s";
       document.body.appendChild(text);
       setTimeout(() => text.remove(), 8000);
     }
 
-    function createHeart() {
+    function createFloatingHeart() {
       const heart = document.createElement("div");
-      heart.className = "heart";
-      const isRed = Math.random() >
+      heart.className = "floating-heart";
+      heart.classList.add(Math.random() > 0.5 ? "red" : "white");
+      heart.textContent = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.top = Math.random() * 100 + "vh";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 3000);
+    }
+
+    function createTapHeart(x, y) {
+      const heart = document.createElement("div");
+      heart.className = "tap-heart";
+      heart.textContent = "❤️";
+      heart.style.left = x - 20 + "px";
+      heart.style.top = y - 20 + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1000);
+    }
+
+    document.addEventListener('click', (e) => {
+      createTapHeart(e.clientX, e.clientY);
+    });
+
+    setInterval(createText, 150);
+    setInterval(createFloatingHeart, 200);
+  </script>
+</body>
+</html>
