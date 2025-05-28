@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tặng Em</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .floating-text {
+            position: absolute;
+            color: #ffb3ec;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff99cc, 0 0 20px #ff99cc;
+            animation: floatText 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .heart {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            transform: rotate(45deg);
+            animation: floatHeart 20s linear infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -5px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: -5px;
+            top: 0;
+        }
+
+        @keyframes floatText {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) scale(1);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const messages = [
+        "Cảm ơn vì em đã đến",
+        "Anh sẽ luôn bên cạnh em",
+        "Làm người yêu anh nhé ❤️",
+        "Anh yêu em nhiều lắm",
+        "Nơi nào cũng có 2 ta, chắc chắn nhé",
+        "Anh yêu Catty",
+        "Cho em xin công thức chỉnh ảnh",
+        "Anh làm có tiền xây cho em cái bệnh viện",
+        "Minh Anh Bình An",
+        "Bé Ốc",
+        "Hi, Mỹ nữ của Anh",
+        "Em muốn anh gọi em là gì nào?"
+    ];
+
+    function createFloatingElement(content, className) {
+        const el = document.createElement("div");
+        el.className = className;
+        el.textContent = content;
+        el.style.left = Math.random() * 100 + "vw";
+        el.style.top = Math.random() * 100 + "vh";
+        el.style.fontSize = (Math.random() * 20 + 16) + "px";
+        el.style.animationDuration = (Math.random() * 20 + 20) + "s";
+        document.body.appendChild(el);
+
+        setTimeout(() => el.remove(), 40000);
+    }
+
+    function generateText() {
+        const text = messages[Math.floor(Math.random() * messages.length)];
+        createFloatingElement(text, "floating-text");
+    }
+
+    function generateHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.top = Math.random() * 100 + "vh";
+        heart.style.animationDuration = (Math.random() * 20 + 20) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 40000);
+    }
+
+    setInterval(generateText, 1000);
+    setInterval(generateHeart, 500);
+</script>
+
+</body>
+</html>
