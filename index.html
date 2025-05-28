@@ -12,7 +12,7 @@
       overflow: hidden;
       height: 100vh;
       font-family: 'Great Vibes', cursive;
-      perspective: 800px;
+      perspective: 1000px;
     }
 
     .falling-text, .heart {
@@ -23,27 +23,37 @@
     }
 
     .falling-text {
-      font-size: 28px;
+      font-size: 3.5vw;
       color: #ffccff;
       text-shadow: 0 0 6px white, 0 0 15px #ff66cc, 0 0 25px #ff66cc;
-      animation: fallText linear infinite;
+      animation: fallText linear forwards;
+      opacity: 0;
+      animation-name: tiktokText;
     }
 
-    @keyframes fallText {
+    @keyframes tiktokText {
       0% {
-        transform: translateY(-10vh) translateZ(var(--depth));
+        transform: scale(0.3) translateY(-10vh) translateZ(var(--depth));
+        opacity: 0;
+      }
+      10% {
+        transform: scale(1.1) translateY(5vh) translateZ(var(--depth));
+        opacity: 1;
+      }
+      90% {
+        transform: scale(1) translateY(100vh) translateZ(var(--depth));
         opacity: 1;
       }
       100% {
-        transform: translateY(110vh) translateZ(var(--depth));
+        transform: scale(1.2) translateY(110vh) translateZ(var(--depth));
         opacity: 0;
       }
     }
 
     .heart {
-      animation: fallHeart linear infinite;
+      animation: fallHeart linear forwards, heartbeat 1.5s infinite ease-in-out;
       color: red;
-      font-size: 24px;
+      font-size: 4.5vw;
       text-shadow: 0 0 10px red;
     }
 
@@ -58,32 +68,79 @@
       }
     }
 
-    .audio-wrapper {
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      25% {
+        transform: scale(1.2);
+      }
+      50% {
+        transform: scale(0.95);
+      }
+      75% {
+        transform: scale(1.15);
+      }
+    }
+
+    .tap-heart {
       position: absolute;
-      bottom: 10px;
+      color: red;
+      font-size: 6vw;
+      pointer-events: none;
+      animation: popHeart 0.8s ease-out forwards;
+      text-shadow: 0 0 10px red;
+    }
+
+    @keyframes popHeart {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0;
+      }
+    }
+
+    .audio-wrapper {
+      position: fixed;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 999;
+    }
+
+    .audio-wrapper button {
+      padding: 14px 28px;
+      font-size: 5vw;
+      background: #ff66cc;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff66cc;
     }
   </style>
 </head>
 <body>
   <div class="audio-wrapper">
-  <button onclick="playMusic()" style="padding: 10px 20px; font-size: 18px; background: #ff66cc; color: white; border: none; border-radius: 8px; cursor: pointer;">
-    💖 YÊU THÌ BẤM VÀO 💖
-  </button>
-  <audio id="bgMusic" loop>
-    <source src="https://tonybit2939.github.io/tony-yeu-vo-catty/CATTYLOVE.mp3" type="audio/mpeg">
-  </audio>
-</div>
+    <button onclick="playMusic()">💖 Click Here 💖</button>
+    <audio id="bgMusic" loop>
+      <source src="https://tonybit2939.github.io/tony-yeu-vo-catty/CATTYLOVE.mp3" type="audio/mpeg">
+    </audio>
+  </div>
 
-<script>
-  function playMusic() {
-    const music = document.getElementById('bgMusic');
-    music.play();
-  }
-</script>
   <script>
+    function playMusic() {
+      const music = document.getElementById('bgMusic');
+      music.play();
+    }
+
     const messages = [
       "Anh yêu Catty",
       "Cho em xin công thức chỉnh ảnh",
@@ -100,9 +157,9 @@
       text.textContent = messages[Math.floor(Math.random() * messages.length)];
       text.style.left = Math.random() * 100 + "vw";
       text.style.setProperty('--depth', (Math.random() * 800 - 400) + "px");
-      text.style.animationDuration = (4 + Math.random() * 3) + "s";
+      text.style.animationDuration = (6 + Math.random() * 2) + "s";
       document.body.appendChild(text);
-      setTimeout(() => text.remove(), 7000);
+      setTimeout(() => text.remove(), 8000);
     }
 
     function createHeart() {
@@ -110,14 +167,29 @@
       heart.className = "heart";
       heart.textContent = "❤️";
       heart.style.left = Math.random() * 100 + "vw";
-      heart.style.setProperty('--scale', (0.5 + Math.random() * 1.5));
-      heart.style.animationDuration = (5 + Math.random() * 3) + "s";
+      heart.style.setProperty('--scale', (0.7 + Math.random() * 1.2));
+      heart.style.animationDuration = (6 + Math.random() * 2) + "s";
       document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 8000);
+      setTimeout(() => heart.remove(), 9000);
     }
 
-    setInterval(createText, 100);
-    setInterval(createHeart, 200);
+    function createTapHeart(x, y) {
+      const heart = document.createElement("div");
+      heart.className = "tap-heart";
+      heart.textContent = "❤️";
+      heart.style.left = x - 20 + "px";
+      heart.style.top = y - 20 + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1000);
+    }
+
+    // Sự kiện chạm hoặc click tạo trái tim tại vị trí
+    document.addEventListener('click', (e) => {
+      createTapHeart(e.clientX, e.clientY);
+    });
+
+    setInterval(createText, 150);
+    setInterval(createHeart, 250);
   </script>
 </body>
 </html>
