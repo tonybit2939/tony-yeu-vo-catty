@@ -1,139 +1,85 @@
-
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tặng Em</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #000;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .floating-text {
-            position: absolute;
-            color: #ffb3ec;
-            font-size: 24px;
-            font-weight: bold;
-            text-shadow: 0 0 10px #ff99cc, 0 0 20px #ff99cc;
-            animation: floatText 30s linear infinite;
-            white-space: nowrap;
-        }
-
-        .heart {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            transform: rotate(45deg);
-            animation: floatHeart 20s linear infinite;
-        }
-
-        .heart::before,
-        .heart::after {
-            content: "";
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            border-radius: 50%;
-        }
-
-        .heart::before {
-            top: -5px;
-            left: 0;
-        }
-
-        .heart::after {
-            left: -5px;
-            top: 0;
-        }
-
-        @keyframes floatText {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        @keyframes floatHeart {
-            0% {
-                transform: translateY(100vh) scale(1);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) scale(1.2);
-                opacity: 0;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tôi Yêu Em</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: black;
+      overflow: hidden;
+      perspective: 1000px;
+    }
+    .star {
+      position: absolute;
+      top: -50px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #ff80ff;
+      text-shadow: 0 0 5px white, 0 0 10px #ff80ff, 0 0 15px #ff80ff;
+      transform: translateZ(0);
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) translateZ(var(--depth));
+        opacity: 0;
+      }
+    }
+    .message {
+      position: absolute;
+      bottom: 120px;
+      width: 100%;
+      text-align: center;
+      font-size: 28px;
+      color: #ffccff;
+      text-shadow: 0 0 5px white, 0 0 10px #ff80ff, 0 0 15px #ff80ff;
+    }
+    .photo {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+    }
+    .photo img {
+      width: 240px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px #ff80ff;
+    }
+  </style>
 </head>
 <body>
-
-<audio autoplay loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-    const messages = [
-        "Cảm ơn vì em đã đến",
-        "Anh sẽ luôn bên cạnh em",
-        "Làm người yêu anh nhé ❤️",
-        "Anh yêu em nhiều lắm",
-        "Nơi nào cũng có 2 ta, chắc chắn nhé",
-        "Anh yêu Catty",
-        "Cho em xin công thức chỉnh ảnh",
-        "Anh làm có tiền xây cho em cái bệnh viện",
-        "Minh Anh Bình An",
-        "Bé Ốc",
-        "Hi, Mỹ nữ của Anh",
-        "Em muốn anh gọi em là gì nào?"
+  <div class="message">Cảm ơn em vì tất cả</div>
+  <div class="photo">
+    <img src="93FC3C5D-4AC4-46FA-B91F-87D776293818.jpeg" alt="Chúng ta" />
+  </div>
+  <audio autoplay loop>
+    <source src="https://cdn.glitch.global/25ed408e-c623-4454-a760-fda02963be1d/diem-khuc-bai-tinh-ca-dau-tien.mp3?v=1716878888888" type="audio/mpeg">
+  </audio>
+  <script>
+    const texts = [
+      "Anh yêu Catty",
+      "Cho em xin công thức chỉnh ảnh",
+      "Anh làm có tiền xây cho em cái bệnh viện",
+      "Minh Anh Bình An",
+      "Bé Ốc",
+      "Hi, Mỹ nữ của Anh",
+      "Em muốn anh gọi em là gì nào?"
     ];
 
-    function createFloatingElement(content, className) {
-        const el = document.createElement("div");
-        el.className = className;
-        el.textContent = content;
-        el.style.left = Math.random() * 100 + "vw";
-        el.style.top = Math.random() * 100 + "vh";
-        el.style.fontSize = (Math.random() * 20 + 16) + "px";
-        el.style.animationDuration = (Math.random() * 20 + 20) + "s";
-        document.body.appendChild(el);
-
-        setTimeout(() => el.remove(), 40000);
+    function createStar() {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.textContent = texts[Math.floor(Math.random() * texts.length)];
+      star.style.left = `${Math.random() * 100}vw`;
+      star.style.animationDuration = `${1 + Math.random() * 2}s`;
+      star.style.setProperty('--depth', `${Math.random() * 500 - 250}px`);
+      document.body.appendChild(star);
+      setTimeout(() => star.remove(), 3000);
     }
-
-    function generateText() {
-        const text = messages[Math.floor(Math.random() * messages.length)];
-        createFloatingElement(text, "floating-text");
-    }
-
-    function generateHeart() {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.top = Math.random() * 100 + "vh";
-        heart.style.animationDuration = (Math.random() * 20 + 20) + "s";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 40000);
-    }
-
-    setInterval(generateText, 1000);
-    setInterval(generateHeart, 500);
-</script>
-
+    setInterval(createStar, 150);
+  </script>
 </body>
 </html>
